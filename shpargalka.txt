@@ -1,0 +1,87 @@
+mongoDB  -   https://cloud.mongodb.com/v2/5fb95a9c3b9d471109f73427#clusters
+heroku сайт   -   https://limitless-sea-09312.herokuapp.com/
+
+======================================================================
+
+
+create-react-app .   -   создает react-проект в текущей папке
+
+
+все сторонние файлы (картинки, шрифты) ложим в папку public
+
+
+data.json  -  содержит данные проекта
+
+
+util.js  -  содержит все вспомогательные функции, декораторы (например добавление '$' перед ценой и округление)
+
+
+условный рендеринг с &&  =  { props.length !== 0 && ( <div className="cart">1</div> ) }
+
+
+npm i react-reveal  -  фреймворк для анимации
+import Fade from 'react-reveal/Fade';
+/* bottom - откуда стартовать, cascade - задрежку для последующих элементов */
+<Fade bottom cascade>   
+  <ul>
+    <li>1</li>
+    <li>1</li>
+    <li>1</li>
+  </ul>
+</Fade>
+
+
+npm i react-modal  -  для модальных окон
+import Modal from 'react-modal';
+<Modal isOpen={true} onRequestClose={closeModal}>
+  <Zoom>
+    <button className='close-modal' onClick={closeModal}>
+      x
+    </button>
+    <div>modal text</div>
+  </Zoom>
+</Modal>
+
+
+========    Back-end API    ==========
+- npm i nodemon   -  надстройка над node.js
+- package.json:
+  "scripts":
+    "server": "nodemon server.js"
+- npm i express body-parser mongoose shortid
+- body-parcer   -  нужен для обработки данных полученных методами POST PUT PATCH
+- !!! создаем server.js в корне проекта  
+- npm run server  -  запускаем сервер (nodemon server.js)
+- тестим соединение в postman
+- добавляем в mongodb все продукты без '_id' из src/data.json методом POST
+- package.json: "proxy": "http://localhost:5000"  -  что бы при fetch запросах (/api/products) перенаправлял на этот порт
+
+
+==========   REDUX   ==========
+- npm i redux react-redux redux-thunk
+- src/types.js  -  создаем action types константы
+- src/action/productActions.js  -  создаем папку с action creators
+- src/reducers/productReducers.js  -  создаем папку с редюсерами
+- src/store.js  -  создаем store
+- подключаем store к Provider в index.js или App.js
+redux-thunk :
+function addToCart() {
+  return (dispatch, getState) => {         первый параметр - dispatch, второй - получить state
+    const { carts } = getState().carts;
+
+    dispatch({
+      type: TYPE,
+      payload: 0
+    });
+  };
+}
+
+
+=========   ДЕПЛОЙ НА HEROKU   =============
+- читаем инструкцию на сайте heroku
+ОБЯЗАТЕЛЬНО:
+- создаем файл Procfile - и пишем web node server.js
+- в server.js указываем путь к статичным файлам:
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static('build'));
+}
